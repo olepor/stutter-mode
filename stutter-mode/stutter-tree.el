@@ -5,44 +5,6 @@
 (defvar tree-stutter-items-list nil
   "A tree to hold the stutter items")
 
-(defun m-insert (element structure)
-  (message "--------------------------")
-  (cond
-   ((not structure)
-    (progn
-      (message "The structure is nil")))
-    ;; #1 car mlist is a cons cell
-    ((consp (car structure))
-     (message "car of structure is a cons cell, e.g. not an id")
-     (if (= (car element) (caar structure))
-         (progn
-         (message "Equality!")
-         (if (functionp (cdr element))
-             (progn
-               (message "the cdr of element is a function - replace")
-               (setcdr (car structure) (cdr element)))
-           ;; The cdar is not a function, hence recurse down the list the cdr points to
-           (progn
-             (message "cdr a list, recurse!")
-             (if (functionp (cdar structure))
-                 (progn
-                   (message "the cdr of structure is a function - replace")
-                   (setcdr (car structure) (cdr element)))
-               (progn
-                 (message "cdr of structure is a list - recurse")
-                 (m-insert (cdr element) (cdar structure))))
-             ))
-         )
-       (progn
-         (message "Not equal. Recurse down the cons-list")
-         (if (not (cdr structure))
-             (progn
-               (message "listp cdr is nil, add the element")
-               (setcdr structure element))
-         (m-insert element (cdar structure))
-         )
-       )))))
-
 (defun minsert (element mlist)
   (cond
    ((consp (car mlist))
