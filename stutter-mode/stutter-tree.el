@@ -68,30 +68,3 @@ stutter-tree-pointer
 (update-stutter-pointer 1)
 
 (update-stutter-pointer 2)
-
-mlist
-
-(cdadr mlist)
-
-(append (cons 2 #'test-print) mlist)
-
-(cdr mlist)
-
-(minsert (cons 1 (cons 2 #'test-print)) mlist)
-
-(setq mlist (list (cons 1  #'test-print)))
-
-(setq in-list (cons 1 (list (cons 2 #'test-print))))
-
-(m-insert in-list mlist)
-
-(m-insert (cons 2 #'test-print) mlist)
-
-(m-insert (cons 3 #'test-print) mlist)
-
-(m-insert (cons 1 #'test-print) mlist)
-
-
-(m-insert (cons 1 (cons 2 #'test-print)) mlist)
-
-(m-insert (cons 3 (cons 2 'message-test)) mlist)
