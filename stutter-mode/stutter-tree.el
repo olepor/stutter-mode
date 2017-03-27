@@ -19,21 +19,6 @@
       (message "%d" prev-char)
       (update-stutter-pointer prev-char))))
 
-(add-hook 'post-command-hook 'latex-stutter-electric-expand)
-
-latex-stutter-character-expansion-tree
-
-(setq stutter-tree-pointer latex-stutter-character-expansion-tree)
-
-(update-stutter-pointer 49)
-
-111
-1111
-111helffjfls
-hslfjheloosjeh heleoshle11111 11 11123458109348-1097424948471934821
-(minsert (cons 49 #'test-print) latex-stutter-character-expansion-tree)
-
-
 (defun minsert (element mlist)
   (cond
    ((consp (car mlist))
