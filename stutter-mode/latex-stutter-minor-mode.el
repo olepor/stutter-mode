@@ -11,6 +11,15 @@
   (interactive)
   (message "pre-command"))
 
+(remove-hook 'post-command-hook 'latex-stutter-electric-expand)
+
+(defun create-stutter (stutter)
+  (let (stutter-list)
+    (dotimes (i (length stutter))
+      (add-to-list 'stutter-list (string-to-char (substring stutter i (1+ i))) t))
+    stutter-list))
+
+(create-stutter "abcd")
 
 (define-minor-mode latex-stutter-mode
   "A minor mode to simplify writing certain environments in
