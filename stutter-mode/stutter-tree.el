@@ -5,8 +5,34 @@
 (defvar stutter-tree-pointer nil
   "points to the last entered item of a sequence, or at the root of the tree")
 
-(defvar tree-stutter-items-list nil
+(defvar latex-stutter-character-expansion-tree nil
   "A tree to hold the stutter items")
+
+;; Needed, as minsert does not handle inserts into empty lists
+(setq latex-stutter-character-expansion-tree (list (cons 1 #'test-print)))
+
+(defun latex-stutter-electric-expand ()
+  (interactive)
+  (when evil-insert-state-minor-mode
+    (let ((prev-char (preceding-char)))
+      (message "working")
+      (message "%d" prev-char)
+      (update-stutter-pointer prev-char))))
+
+(add-hook 'post-command-hook 'latex-stutter-electric-expand)
+
+latex-stutter-character-expansion-tree
+
+(setq stutter-tree-pointer latex-stutter-character-expansion-tree)
+
+(update-stutter-pointer 49)
+
+111
+1111
+111helffjfls
+hslfjheloosjeh heleoshle11111 11 11123458109348-1097424948471934821
+(minsert (cons 49 #'test-print) latex-stutter-character-expansion-tree)
+
 
 (defun minsert (element mlist)
   (cond
@@ -45,26 +71,10 @@
           (if (functionp (cdar stutter-tree-pointer))
               (progn
                 (funcall (cdar stutter-tree-pointer))
-                (setq stutter-tree-pointer tree-stutter-items-list))
+                (setq stutter-tree-pointer latex-stutter-character-expansion-tree))
             (setq stutter-tree-pointer (cdar stutter-tree-pointer)))
         (progn
           (setq stutter-tree-pointer (cdr stutter-tree-pointer))
           (update-stutter-pointer arg)))
     ;; Might not be necessary. we will always be working with mlists
-    (setq stutter-tree-pointer tree-stutter-items-list)))
-
-(setq tree-stutter-items-list (list (cons 1 #'test-print)))
-
-tree-stutter-items-list
-
-(minsert (cons 1 (cons 3 #'test-print)) tree-stutter-items-list)
-
-(minsert (cons 2 #'test-print) tree-stutter-items-list)
-
-stutter-tree-pointer
-
-(setq stutter-tree-pointer tree-stutter-items-list)
-
-(update-stutter-pointer 1)
-
-(update-stutter-pointer 2)
+    (setq stutter-tree-pointer latex-stutter-character-expansion-tree)))
