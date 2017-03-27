@@ -13,13 +13,15 @@
 
 (remove-hook 'post-command-hook 'latex-stutter-electric-expand)
 
-(defun create-stutter (stutter)
+(defun create-stutter (stutter function)
   (let (stutter-list)
     (dotimes (i (length stutter))
       (add-to-list 'stutter-list (string-to-char (substring stutter i (1+ i))) t))
-    stutter-list))
+    (append
+     (subseq stutter-list 0 (1- (length stutter-list)))
+     (cons (car (last stutter-list)) function))))
 
-(create-stutter "abcd")
+(create-stutter "abcd" 'test-print)
 
 (define-minor-mode latex-stutter-mode
   "A minor mode to simplify writing certain environments in
