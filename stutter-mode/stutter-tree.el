@@ -51,7 +51,7 @@
           (setq stutter-tree-pointer (cdr stutter-tree-pointer))
           (update-stutter-pointer arg)))
     ;; Might not be necessary. we will always be working with mlists
-    (message "first element is not a cons cell")))
+    (setq stutter-tree-pointer tree-stutter-items-list)))
 
 (setq tree-stutter-items-list (list (cons 1 #'test-print)))
 
