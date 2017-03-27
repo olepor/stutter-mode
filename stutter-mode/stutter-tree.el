@@ -2,6 +2,9 @@
 (defvar stutter-tree-head nil
   "Head of the stutter tree")
 
+(defvar stutter-tree-pointer nil
+  "points to the last entered item of a sequence, or at the root of the tree")
+
 (defvar tree-stutter-items-list nil
   "A tree to hold the stutter items")
 
@@ -33,6 +36,38 @@
           (minsert element (cdr mlist))))))
    (t "message The car is neither cons nor integer - error!")))
 
+(defun update-stutter-pointer (arg)
+  (interactive)
+  ;; if arg in mlist or arg equals id?
+  ;; #1 find the id-cons-cell in the mlist
+  (if (consp (car stutter-tree-pointer))
+      (if (= arg (caar stutter-tree-pointer))
+          (if (functionp (cdar stutter-tree-pointer))
+              (progn
+                (funcall (cdar stutter-tree-pointer))
+                (setq stutter-tree-pointer tree-stutter-items-list))
+            (setq stutter-tree-pointer (cdar stutter-tree-pointer)))
+        (progn
+          (setq stutter-tree-pointer (cdr stutter-tree-pointer))
+          (update-stutter-pointer arg)))
+    ;; Might not be necessary. we will always be working with mlists
+    (message "first element is not a cons cell")))
+
+(setq tree-stutter-items-list (list (cons 1 #'test-print)))
+
+tree-stutter-items-list
+
+(minsert (cons 1 (cons 3 #'test-print)) tree-stutter-items-list)
+
+(minsert (cons 2 #'test-print) tree-stutter-items-list)
+
+stutter-tree-pointer
+
+(setq stutter-tree-pointer tree-stutter-items-list)
+
+(update-stutter-pointer 1)
+
+(update-stutter-pointer 2)
 
 mlist
 
@@ -41,7 +76,6 @@ mlist
 (append (cons 2 #'test-print) mlist)
 
 (cdr mlist)
-
 
 (minsert (cons 1 (cons 2 #'test-print)) mlist)
 
