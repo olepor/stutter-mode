@@ -80,7 +80,13 @@
 
 mlist
 
+(minsert (list 5 #'test-print) mlist)
+
 (minsert (list 1 2 3 #'test-print) mlist)
+
+(minsert (list 5 3 2 1 #'test-print) mlist)
+
+(minsert (list 4 2 #'test-print) mlist)
 
 (minsert (list 1 #'test-print) mlist)
 
