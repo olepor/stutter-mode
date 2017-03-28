@@ -19,38 +19,11 @@
       (message "%d" prev-char)
       (update-stutter-pointer prev-char))))
 
-(defun minsert (element mlist)
-  (cond
-   ((consp (car mlist))
-    (progn
-      (message "The car of mlist is a cons cell")
-      ;; Check id's towards element id
-      (if (= (car element) (caar mlist))
-          (progn
-            (message "inserting with a matching id")
-            (minsert (cdr element) (car mlist)))
-        (if (cdr mlist)
-            ;; mlist has a cdr
-            (minsert element (cdr mlist))
-         (setcdr mlist (list element))))))
-   ((integerp (car mlist))
-    (progn
-      (message "The car of mlist is an integer")
-      ;; the element is either a function, or a cons-cell list
-      ;; the id's cdr is either a function or an mlist
-      (if (functionp element)
-          (setcdr mlist element)
-        (if (functionp (cdr mlist))
-            (setcdr mlist (list element))
-          ;; the element cdr is an mlist and so is the cdr of id
-          ;; Thus insert it into the mlist
-          (minsert element (cdr mlist))))))
-   (t "message The car is neither cons nor integer - error!")))
-
 (defun create-mlists (tlists)
   (let* (
          (mlists (list (cons (car tlists) nil)))
          (temp-list-pointer (car mlists)))
+    (setq tlists (cdr tlists))
     (dotimes (i (1- (length tlists)))
       (message "Hmm")
       (message "%d" (car temp-list-pointer))
@@ -64,11 +37,56 @@
       (setcdr temp-list-pointer (car tlists))
       mlists)))
 
+(defun minsert (element mlist)
+  (cond
+   ((consp (car mlist))
+    (progn
+      (message "The car of mlist is a cons cell")
+      ;; Check id's towards element id
+      (if (= (car element) (caar mlist))
+          (progn
+            (message "inserting with a matching id")
+            (minsert (cdr element) (car mlist)))
+        (if (cdr mlist)
+            ;; mlist has a cdr
+            (minsert element (cdr mlist))
+         (setcdr mlist (create-mlists element))))))
+   ((integerp (car mlist))
+    (progn
+      (message "The car of mlist is an integer")
+      ;; the element is either a function, or a cons-cell list
+      ;; the id's cdr is either a function or an mlist
+      (if (functionp (car element))
+          (progn
+            (message "functionp element")
+           (setcdr mlist (car element))
+           )
+        (if (functionp (cdr mlist))
+            ;; (progn
+            ;;   (message "adding cdr to list")
+            ;;   (setcdr mlist element))
+            (progn
+              (message "well")
+             (if (> (length element) 1)
+                 (setcdr mlist (create-mlists element))
+               (setcdr mlist (list element)))
+             )
+          ;; the element cdr is an mlist and so is the cdr of id
+          ;; Thus insert it into the mlist
+          (minsert element (cdr mlist))))))
+   (t "message The car is neither cons nor integer - error!")))
+
 (setq mlist (list (cons 1 #'test-print)))
 
 mlist
 
-(minsert (cons 2 (cons 2 (cons 3 (cons 4 #'test-print)))) mlist)
+(minsert (list 1 2 3 #'test-print) mlist)
+
+(minsert (list 1 #'test-print) mlist)
+
+(minsert (list 1 3 #'test-print) mlist)
+
+(minsert (list 1 2 #'test-print) mlist)
 
 (cons 1 (cons 2 #'test-print))
 
