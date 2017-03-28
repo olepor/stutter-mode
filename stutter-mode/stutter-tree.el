@@ -47,6 +47,32 @@
           (minsert element (cdr mlist))))))
    (t "message The car is neither cons nor integer - error!")))
 
+(defun create-mlists (tlists)
+  (let* (
+         (mlists (list (cons (car tlists) nil)))
+         (temp-list-pointer (car mlists)))
+    (dotimes (i (1- (length tlists)))
+      (message "Hmm")
+      (message "%d" (car temp-list-pointer))
+      (setcdr temp-list-pointer (list (cons (car tlists) nil)))
+      (message "%d" (caadr temp-list-pointer))
+      (setq temp-list-pointer (cadr temp-list-pointer))
+      (message "well")
+      (message "%d" (car temp-list-pointer))
+      (setq tlists (cdr tlists)))
+    (progn
+      (setcdr temp-list-pointer (car tlists))
+      mlists)))
+
+(setq mlist (list (cons 1 #'test-print)))
+
+mlist
+
+(minsert (cons 2 (cons 2 (cons 3 (cons 4 #'test-print)))) mlist)
+
+(cons 1 (cons 2 #'test-print))
+
+
 (defun update-stutter-pointer (arg)
   (interactive)
   ;; if arg in mlist or arg equals id?
@@ -63,3 +89,6 @@
           (update-stutter-pointer arg)))
     ;; Might not be necessary. we will always be working with mlists
     (setq stutter-tree-pointer latex-stutter-character-expansion-tree)))
+
+(update-stutter-pointer 98)
+
