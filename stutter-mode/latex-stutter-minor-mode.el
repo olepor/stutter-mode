@@ -19,11 +19,21 @@
   (let (stutter-list)
     (dotimes (i (length stutter))
       (add-to-list 'stutter-list (string-to-char (substring stutter i (1+ i))) t))
-    (append
-     (subseq stutter-list 0 (1- (length stutter-list)))
-     (cons (car (last stutter-list)) function))))
+    (progn
+      (setcdr (last stutter-list) (cons function nil))
+      stutter-list)))
 
-(minsert (create-stutter "abcd" 'test-print) latex-stutter-character-expansion-tree)
+(create-stutter "abc" #'test-print)
+
+(minsert (create-stutter "ab" #'test-print) mlist)
+
+(minsert (list 1 2 3 #'test-print) mlist)
+
+mlist
+
+(append (list "a" "b") #'test-print)
+
+(concatenate (list 1 2 3) #'test-print)
 
 stutter-tree-pointer
 
