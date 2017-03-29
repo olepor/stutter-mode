@@ -19,6 +19,10 @@
       (message "%d" prev-char)
       (update-stutter-pointer prev-char))))
 
+(add-hook 'post-command-hook 'latex-stutter-electric-expand)
+
+(remove-hook 'post-command-hook 'latex-stutter-electric-expand)
+
 (defun create-mlists (tlists)
   (let* (
          (mlists (list (cons (car tlists) nil)))
@@ -76,27 +80,6 @@
           (minsert element (cdr mlist))))))
    (t "message The car is neither cons nor integer - error!")))
 
-(setq mlist (list (cons 1 #'test-print)))
-
-mlist
-
-(minsert (list 5 #'test-print) mlist)
-
-(minsert (list 1 2 3 #'test-print) mlist)
-
-(minsert (list 5 3 2 1 #'test-print) mlist)
-
-(minsert (list 4 2 #'test-print) mlist)
-
-(minsert (list 1 #'test-print) mlist)
-
-(minsert (list 1 3 #'test-print) mlist)
-
-(minsert (list 1 2 #'test-print) mlist)
-
-(cons 1 (cons 2 #'test-print))
-
-
 (defun update-stutter-pointer (arg)
   (interactive)
   ;; if arg in mlist or arg equals id?
@@ -114,5 +97,10 @@ mlist
     ;; Might not be necessary. we will always be working with mlists
     (setq stutter-tree-pointer latex-stutter-character-expansion-tree)))
 
-(update-stutter-pointer 98)
-
+(defun create-stutter (stutter function)
+  (let (stutter-list)
+    (dotimes (i (length stutter))
+      (add-to-list 'stutter-list (string-to-char (substring stutter i (1+ i))) t))
+    (progn
+      (setcdr (last stutter-list) (cons function nil))
+      stutter-list)))

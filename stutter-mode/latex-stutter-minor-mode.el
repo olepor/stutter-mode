@@ -15,29 +15,12 @@
 
 (add-hook 'post-command-hook 'latex-stutter-electric-expand)
 
-(defun create-stutter (stutter function)
-  (let (stutter-list)
-    (dotimes (i (length stutter))
-      (add-to-list 'stutter-list (string-to-char (substring stutter i (1+ i))) t))
-    (progn
-      (setcdr (last stutter-list) (cons function nil))
-      stutter-list)))
-
-(create-stutter "abc" #'test-print)
 
 (minsert (create-stutter "ab" #'test-print) mlist)
 
-(minsert (list 1 2 3 #'test-print) mlist)
+(minsert (list 1 2 #'test-print) mlist)
 
 mlist
-
-(append (list "a" "b") #'test-print)
-
-(concatenate (list 1 2 3) #'test-print)
-
-stutter-tree-pointer
-
-latex-stutter-character-expansion-tree
 
 (define-minor-mode latex-stutter-mode
   "A minor mode to simplify writing certain environments in
