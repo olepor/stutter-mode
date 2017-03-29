@@ -104,3 +104,16 @@
     (progn
       (setcdr (last stutter-list) (cons function nil))
       stutter-list)))
+
+mlist
+
+(minsert (create-stutter "asd" #'test-print) mlist)
+
+(defun insert-and-create-stutter (stutter function targetlist)
+  (minsert (create-stutter stutter function) targetlist))
+
+latex-stutter-character-expansion-tree
+
+(setq stutter-tree-pointer latex-stutter-character-expansion-tree)
+
+(insert-and-create-stutter "asd" #'test-print latex-stutter-character-expansion-tree)
