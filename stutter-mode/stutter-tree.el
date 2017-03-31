@@ -4,7 +4,6 @@
 
 (defvar stutter-tree-pointer nil
   "points to the last entered item of a sequence, or at the root of the tree")
-
 (defvar latex-stutter-character-expansion-tree nil
   "A tree to hold the stutter items")
 
@@ -18,10 +17,6 @@
       (message "working")
       (message "%d" prev-char)
       (update-stutter-pointer prev-char))))
-
-(add-hook 'post-command-hook 'latex-stutter-electric-expand)
-
-(remove-hook 'post-command-hook 'latex-stutter-electric-expand)
 
 (defun create-mlists (tlists)
   (let* (
@@ -97,23 +92,20 @@
     ;; Might not be necessary. we will always be working with mlists
     (setq stutter-tree-pointer latex-stutter-character-expansion-tree)))
 
+;; Needed to append equal elements with add-to-list
+(defun false-compare-fn (a b)
+  (interactive)
+  nil)
+
 (defun create-stutter (stutter function)
   (let (stutter-list)
     (dotimes (i (length stutter))
-      (add-to-list 'stutter-list (string-to-char (substring stutter i (1+ i))) t))
+      (message "..")
+      (message (substring stutter i (1+ i)))
+      (add-to-list 'stutter-list (string-to-char (substring stutter i (1+ i))) t #'false-compare-fn))
     (progn
       (setcdr (last stutter-list) (cons function nil))
       stutter-list)))
 
-mlist
-
-(minsert (create-stutter "asd" #'test-print) mlist)
-
 (defun insert-and-create-stutter (stutter function targetlist)
   (minsert (create-stutter stutter function) targetlist))
-
-latex-stutter-character-expansion-tree
-
-(setq stutter-tree-pointer latex-stutter-character-expansion-tree)
-
-(insert-and-create-stutter "asd" #'test-print latex-stutter-character-expansion-tree)

@@ -15,12 +15,13 @@
 
 (add-hook 'post-command-hook 'latex-stutter-electric-expand)
 
-
-(minsert (create-stutter "ab" #'test-print) mlist)
-
-(minsert (list 1 2 #'test-print) mlist)
-
-mlist
+(defun create-latex-stutters ()
+  (interactive)
+  (setq latex-stutter-character-expansion-tree (list (cons 1 #'test-print)))
+  (setq latex-stutter-tree-pointer latex-stutter-character-expansion-tree)
+  (insert-and-create-stutter ",," #'test-pre-command-hook latex-stutter-character-expansion-tree)
+  (insert-and-create-stutter ",." #'test-pre-command-hook latex-stutter-character-expansion-tree)
+  (add-hook 'post-command-hook 'latex-stutter-electric-expand))
 
 (define-minor-mode latex-stutter-mode
   "A minor mode to simplify writing certain environments in
@@ -30,6 +31,7 @@ LAteX"
   :version "0.1"
   ;; As every insert is simply a command, binding to post-command-hook
   ;;does the trick
-  (add-hook 'post-command-hook 'latex-stutter-electric-expand))
+  (add-hook 'post-command-hook 'latex-stutter-electric-expand)
+  (create-latex-stutters))
 
 (provide 'latex-stutter-minor-mode)
