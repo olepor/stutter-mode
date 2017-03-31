@@ -1,4 +1,5 @@
-(load-file "stutter-tree.el")
+(load-file "~/.emacsmodes/stutter-mode/stutter-tree.el")
+(load-file "~/.emacsmodes/stutter-mode/latex-stutter-expansion-functions.el")
 
 (defvar latex-stutter-mode-map "Keymap for latex-stutter-mode minor map")
 
@@ -11,15 +12,11 @@
   (interactive)
   (message "pre-command"))
 
-(remove-hook 'post-command-hook 'latex-stutter-electric-expand)
-
-(add-hook 'post-command-hook 'latex-stutter-electric-expand)
-
 (defun create-latex-stutters ()
   (interactive)
   (setq latex-stutter-character-expansion-tree (list (cons 1 #'test-print)))
   (setq latex-stutter-tree-pointer latex-stutter-character-expansion-tree)
-  (insert-and-create-stutter ",," #'test-pre-command-hook latex-stutter-character-expansion-tree)
+  (insert-and-create-stutter ",," #'latex-stutter-expand-inline-math-mode latex-stutter-character-expansion-tree)
   (insert-and-create-stutter ",." #'test-pre-command-hook latex-stutter-character-expansion-tree)
   (add-hook 'post-command-hook 'latex-stutter-electric-expand))
 
